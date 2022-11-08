@@ -7,6 +7,7 @@ import Submit from "../form/Submit";
 import Title from "../form/Title";
 
 const OTP_LENGHT = 6;
+let currentOTPIndex;
 
 export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGHT).fill(""));
@@ -14,12 +15,32 @@ export default function EmailVerification() {
 
   const inputRef = useRef();
 
-  const handleOtpChange = ({ target }, index) => {
-    const { value } = target;
-    // setOtp([value]);
+  const focusNextInputField = (index) => {
     setActiveOtpIndex(index + 1);
   };
+  const focusPrevInputField = (index) => {
+    let nextIndex;
+    const diff = index - 1;
+    nextIndex = diff !== 0 ? diff : 0;
+    setActiveOtpIndex(nextIndex);
+  };
 
+  const handleOtpChange = ({ target }, index) => {
+    const { value } = target;
+    const newOtp = [...otp];
+    newOtp[currentOTPIndex] = value.substring(value.length - 1, value.length);
+
+    if (!value) focusPrevInputField(currentOTPIndex);
+    else focusNextInputField(currentOTPIndex);
+    setOtp([...newOtp]);
+  };
+
+  const handleKeyDown = ({ key }, index) => {
+    currentOTPIndex = index;
+    if (key === "Backspace") {
+      focusPrevInputField(currentOTPIndex);
+    }
+  };
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
@@ -41,7 +62,8 @@ export default function EmailVerification() {
                   key={index}
                   type="number"
                   value={otp[index] || ""}
-                  onChange={(e) => handleOtpChange(e, index)}
+                  onChange={handleOtpChange}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
                   className="w-12 h-12 border-2 rounded border-dark-subtle focus:border-white bg-transparent outline-none transition text-center text-white font-semibold text-xl"
                 />
               );
