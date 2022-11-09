@@ -4,8 +4,11 @@ import FormInput from "../form/FormInput";
 import Title from "../form/Title";
 import Submit from "../form/Submit";
 import CustomLink from "../CustomLink";
+import { useTheme } from "../../hooks";
 
 export default function Signin() {
+  const theme = useTheme();
+  theme.method();
   return (
     <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
