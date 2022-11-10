@@ -1,11 +1,11 @@
 import React from "react";
 import { BsFillSunFill } from "react-icons/bs";
-import Container from "../Container";
 import { Link } from "react-router-dom";
+import Container from "../Container";
 
 export default function Navbar() {
   return (
-    <div className="bg-secondary">
+    <div className="bg-secondary shadow-sm shadow-gray-500">
       <Container className="p-2">
         <div className="flex justify-between items-center">
           <Link to="/">
@@ -22,11 +22,16 @@ export default function Navbar() {
               <input
                 type="text"
                 className="border-2 border-dark-subtle p-1 rounded bg-transparent text-xl outline-none focus:border-white transition text-white"
-                placeholder="Search here"
+                placeholder="search..."
               />
             </li>
-            <li className="text-white font-semibold text-lg">
-              <Link to="/auth/signin">Login</Link>
+            <li>
+              <Link
+                className="text-white font-semibold text-lg"
+                to="/auth/signin"
+              >
+                Login
+              </Link>
             </li>
           </ul>
         </div>

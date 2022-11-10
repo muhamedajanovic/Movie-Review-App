@@ -1,16 +1,13 @@
-import React from "react";
-import { useEffect } from "react";
-import { useRef } from "react";
-import { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Container from "../Container";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
 
-const OTP_LENGHT = 6;
+const OTP_LENGTH = 6;
 let currentOTPIndex;
 
 export default function EmailVerification() {
-  const [otp, setOtp] = useState(new Array(OTP_LENGHT).fill(""));
+  const [otp, setOtp] = useState(new Array(OTP_LENGTH).fill(""));
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
 
   const inputRef = useRef();
@@ -18,6 +15,7 @@ export default function EmailVerification() {
   const focusNextInputField = (index) => {
     setActiveOtpIndex(index + 1);
   };
+
   const focusPrevInputField = (index) => {
     let nextIndex;
     const diff = index - 1;
@@ -25,7 +23,7 @@ export default function EmailVerification() {
     setActiveOtpIndex(nextIndex);
   };
 
-  const handleOtpChange = ({ target }, index) => {
+  const handleOtpChange = ({ target }) => {
     const { value } = target;
     const newOtp = [...otp];
     newOtp[currentOTPIndex] = value.substring(value.length - 1, value.length);
@@ -41,19 +39,22 @@ export default function EmailVerification() {
       focusPrevInputField(currentOTPIndex);
     }
   };
+
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
+
   return (
     <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
       <Container>
         <form className="bg-secondary rounded p-6 space-y-6">
           <div>
-            <Title>Plese enter the OTP to verify your account</Title>
+            <Title>Please enter the OTP to verify your account</Title>
             <p className="text-center text-dark-subtle">
               OTP has been sent to your email
             </p>
           </div>
+
           <div className="flex justify-center items-center space-x-4">
             {otp.map((_, index) => {
               return (
@@ -64,12 +65,13 @@ export default function EmailVerification() {
                   value={otp[index] || ""}
                   onChange={handleOtpChange}
                   onKeyDown={(e) => handleKeyDown(e, index)}
-                  className="w-12 h-12 border-2 rounded border-dark-subtle focus:border-white bg-transparent outline-none transition text-center text-white font-semibold text-xl"
+                  className="w-12 h-12 border-2 border-dark-subtle focus:border-white rounded bg-transparent outline-none text-center text-white font-semibold text-xl spin-button-none"
                 />
               );
             })}
           </div>
-          <Submit value="Sign in" />
+
+          <Submit value="Send Link" />
         </form>
       </Container>
     </div>
