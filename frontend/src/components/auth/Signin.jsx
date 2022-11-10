@@ -1,10 +1,9 @@
 import React from "react";
-
 import Container from "../Container";
-import CustomLink from "../CustomLink";
 import FormInput from "../form/FormInput";
-import Submit from "../form/Submit";
 import Title from "../form/Title";
+import Submit from "../form/Submit";
+import CustomLink from "../CustomLink";
 
 export default function Signin() {
   return (
@@ -12,8 +11,16 @@ export default function Signin() {
       <Container>
         <form className="dark:bg-secondary rounded p-6 w-72 space-y-6">
           <Title>Sign in</Title>
-          <FormInput label="Email" placeholder="john@email.com" name="email" />
-          <FormInput label="Password" placeholder="********" name="password" />
+          <FormInput
+            label="Email"
+            placeholder="someone@example.com"
+            name="email"
+          ></FormInput>
+          <FormInput
+            label="Password"
+            placeholder="*******"
+            name="password"
+          ></FormInput>
           <Submit value="Sign in" />
 
           <div className="flex justify-between">

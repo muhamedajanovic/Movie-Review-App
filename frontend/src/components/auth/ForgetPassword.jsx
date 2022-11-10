@@ -11,7 +11,11 @@ export default function ForgetPassword() {
       <Container>
         <form className="bg-secondary rounded p-6 w-96 space-y-6">
           <Title>Please Enter Your Email</Title>
-          <FormInput label="Email" placeholder="john@email.com" name="email" />
+          <FormInput
+            label="Email"
+            placeholder="someone@example.com"
+            name="email"
+          ></FormInput>
           <Submit value="Send Link" />
 
           <div className="flex justify-between">
