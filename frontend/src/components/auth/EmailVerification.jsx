@@ -45,9 +45,9 @@ export default function EmailVerification() {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
   return (
-    <div className="fixed inset-0 bg-primary -z-10 flex justify-center items-center">
+    <div className="fixed inset-0 dark:bg-primary -z-10 flex justify-center items-center">
       <Container>
-        <form className="bg-secondary rounded p-6 space-y-6">
+        <form className="dark:bg-secondary rounded p-6 space-y-6">
           <div>
             <Title>Plese enter the OTP to verify your account</Title>
             <p className="text-center text-dark-subtle">
