@@ -8,6 +8,21 @@ import CustomLink from "../CustomLink";
 import { commonModalClasses } from "../../utils/theme";
 import FormContainer from "../form/FormContainer";
 
+const validateUserInfo = ({ name, email, password }) => {
+  if (!name.trim()) return { ok: false, error: "Name is missing!" };
+  if (!/^[a-z A-Z]+$/.test(name)) return { ok: false, error: "Invalid name!" };
+
+  if (!email.trim()) return { ok: false, error: "Email is missing!" };
+  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
+    return { ok: false, error: "Invalid email!" };
+
+  if (!password.trim()) return { ok: false, error: "Password is missing!" };
+  if (password.length < 8)
+    return { ok: false, error: "Password should be longer than 8 characters!" };
+
+  return { ok: true };
+};
+
 export default function Signup() {
   const [userInfo, setUserInfo] = useState({
     name: "",
@@ -22,6 +37,9 @@ export default function Signup() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const { ok, error } = validateUserInfo(userInfo);
+
+    if (!ok) return console.log(error);
     console.log(userInfo);
   };
 
