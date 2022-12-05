@@ -8,6 +8,7 @@ import Container from "../Container";
 import FormContainer from "../form/FormContainer";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
+import { verifyUserEmail } from "../../api/auth";
 
 const OTP_LENGHT = 6;
 let currentOTPIndex;
@@ -61,21 +62,27 @@ export default function EmailVerification() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!isValidOTP(otp)) return console.log("invalid");
 
-    console.log(otp);
+    const { error, message } = await verifyUserEmail({
+      OTP: otp.join(""),
+      userId: user.id,
+    });
+    if (error) return console.log(error);
+
+    console.log(message);
   };
 
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
 
-  // useEffect(() => {
-  //   if (!user) navigate("/not-foud");
-  // }, [user]);
+  useEffect(() => {
+    if (!user) navigate("/not-foud");
+  }, [user]);
 
   return (
     <FormContainer>
