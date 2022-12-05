@@ -12,6 +12,17 @@ import Title from "../form/Title";
 const OTP_LENGHT = 6;
 let currentOTPIndex;
 
+const isValidOTP = (otp) => {
+  let valid = false;
+
+  for (let val of otp) {
+    valid = !isNaN(parseInt(val));
+    if (!valid) break;
+  }
+
+  return valid;
+};
+
 export default function EmailVerification() {
   const [otp, setOtp] = useState(new Array(OTP_LENGHT).fill(""));
   const [activeOtpIndex, setActiveOtpIndex] = useState(0);
@@ -49,18 +60,27 @@ export default function EmailVerification() {
       focusPrevInputField(currentOTPIndex);
     }
   };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!isValidOTP(otp)) return console.log("invalid");
+
+    console.log(otp);
+  };
+
   useEffect(() => {
     inputRef.current?.focus();
   }, [activeOtpIndex]);
 
-  useEffect(() => {
-    if (!user) navigate("/not-foud");
-  }, [user]);
+  // useEffect(() => {
+  //   if (!user) navigate("/not-foud");
+  // }, [user]);
 
   return (
     <FormContainer>
       <Container>
-        <form className={commonModalClasses}>
+        <form onSubmit={handleSubmit} className={commonModalClasses}>
           <div>
             <Title>Plese enter the OTP to verify your account</Title>
             <p className="text-center dark:text-dark-subtle text-light-subtle">
@@ -82,7 +102,7 @@ export default function EmailVerification() {
               );
             })}
           </div>
-          <Submit value="Sign in" />
+          <Submit value="Verify account" />
         </form>
       </Container>
     </FormContainer>
