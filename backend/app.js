@@ -5,11 +5,15 @@ require("dotenv").config();
 require("express-async-errors");
 require("./db");
 const cors = require("cors");
+const { handleNotFound } = require("./utils/helper");
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/user", userRouter);
+
+app.use("/*", handleNotFound);
+
 app.use(errorHandler);
 
 // app.post(
