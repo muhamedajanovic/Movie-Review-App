@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import Container from "../Container";
 import FormInput from "../form/FormInput";
 import Title from "../form/Title";
@@ -31,6 +33,8 @@ export default function Signup() {
     password: "",
   });
 
+  const navigate = useNavigate();
+
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setUserInfo({ ...userInfo, [name]: value });
@@ -44,7 +48,10 @@ export default function Signup() {
 
     const response = await createUser(userInfo);
     if (response.error) return console.log(response.error);
-    console.log(response.user);
+    navigate("/auth/verification", {
+      state: { user: response.user },
+      replace: true,
+    });
   };
 
   const { name, email, password } = userInfo;
