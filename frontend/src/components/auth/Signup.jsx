@@ -10,6 +10,7 @@ import CustomLink from "../CustomLink";
 import { commonModalClasses } from "../../utils/theme";
 import FormContainer from "../form/FormContainer";
 import { createUser } from "../../api/auth";
+import { useNotification } from "../../hooks";
 
 const validateUserInfo = ({ name, email, password }) => {
   if (!name.trim()) return { ok: false, error: "Name is missing!" };
@@ -35,6 +36,8 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
+  const { updateNotification } = useNotification();
+
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setUserInfo({ ...userInfo, [name]: value });
@@ -44,10 +47,10 @@ export default function Signup() {
     e.preventDefault();
     const { ok, error } = validateUserInfo(userInfo);
 
-    if (!ok) return console.log(error);
+    if (!ok) return updateNotification("error", error);
 
     const response = await createUser(userInfo);
-    if (response.error) return console.log(response.error);
+    if (response.error) return updateNotification("error", response.error);
     navigate("/auth/verification", {
       state: { user: response.user },
       replace: true,
