@@ -30,6 +30,8 @@ export default function Signin() {
   const { handleLogin, authInfo } = useAuth();
   const { isPending } = authInfo;
 
+  console.log(authInfo);
+
   const handleChange = ({ target }) => {
     const { value, name } = target;
     setUserInfo({ ...userInfo, [name]: value });
