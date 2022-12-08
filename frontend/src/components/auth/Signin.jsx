@@ -7,6 +7,8 @@ import CustomLink from "../CustomLink";
 import { commonModalClasses } from "../../utils/theme";
 import FormContainer from "../form/FormContainer";
 import { useAuth, useNotification } from "../../hooks";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const validateUserInfo = ({ email, password }) => {
   if (!email.trim()) return { ok: false, error: "Email is missing!" };
@@ -26,11 +28,10 @@ export default function Signin() {
     password: "",
   });
 
+  const navigate = useNavigate();
   const { updateNotification } = useNotification();
   const { handleLogin, authInfo } = useAuth();
-  const { isPending } = authInfo;
-
-  console.log(authInfo);
+  const { isPending, isLoggedIn } = authInfo;
 
   const handleChange = ({ target }) => {
     const { value, name } = target;
@@ -44,6 +45,10 @@ export default function Signin() {
     if (!ok) return updateNotification("error", error);
     handleLogin(userInfo.email, userInfo.password);
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/");
+  }, [isLoggedIn]);
 
   return (
     <FormContainer>

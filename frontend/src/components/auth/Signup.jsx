@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Container from "../Container";
@@ -10,7 +10,7 @@ import CustomLink from "../CustomLink";
 import { commonModalClasses } from "../../utils/theme";
 import FormContainer from "../form/FormContainer";
 import { createUser } from "../../api/auth";
-import { useNotification } from "../../hooks";
+import { useAuth, useNotification } from "../../hooks";
 
 const validateUserInfo = ({ name, email, password }) => {
   if (!name.trim()) return { ok: false, error: "Name is missing!" };
@@ -36,6 +36,9 @@ export default function Signup() {
 
   const navigate = useNavigate();
 
+  const { authInfo } = useAuth();
+  const { isLoggedIn } = authInfo;
+
   const { updateNotification } = useNotification();
 
   const handleChange = ({ target }) => {
@@ -56,6 +59,10 @@ export default function Signup() {
       replace: true,
     });
   };
+
+  useEffect(() => {
+    if (isLoggedIn) navigate("/");
+  }, [isLoggedIn]);
 
   const { name, email, password } = userInfo;
 
