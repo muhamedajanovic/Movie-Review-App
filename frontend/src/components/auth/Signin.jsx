@@ -9,11 +9,12 @@ import FormContainer from "../form/FormContainer";
 import { useAuth, useNotification } from "../../hooks";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { isValidEmail } from "../../utils/helper";
+import AuthProvider from "../../context/AuthProvider";
 
 const validateUserInfo = ({ email, password }) => {
   if (!email.trim()) return { ok: false, error: "Email is missing!" };
-  if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))
-    return { ok: false, error: "Invalid email!" };
+  if (!isValidEmail(email)) return { ok: false, error: "Invalid email!" };
 
   if (!password.trim()) return { ok: false, error: "Password is missing!" };
   if (password.length < 8)
