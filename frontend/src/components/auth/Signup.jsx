@@ -89,7 +89,7 @@ export default function Signup() {
             value={password}
             onChange={handleChange}
             label="Password"
-            placeholder="*******"
+            placeholder="·········"
             name="password"
             type="password"
           ></FormInput>
