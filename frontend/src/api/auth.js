@@ -55,9 +55,7 @@ export const getIsAuth = async (token) => {
 
 export const forgetPassword = async (email) => {
   try {
-    const { data } = await client.post("/user/forget-password", {
-      email,
-    });
+    const { data } = await client.post("/user/forget-password", { email });
     return data;
   } catch (error) {
     const { response } = error;

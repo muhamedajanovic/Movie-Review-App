@@ -1,31 +1,67 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ImSpinner3 } from "react-icons/im";
-import { useSearchParams } from "react-router-dom";
 import { commonModalClasses } from "../../utils/theme";
 import Container from "../Container";
-import CustomLink from "../CustomLink";
 import FormContainer from "../form/FormContainer";
 import FormInput from "../form/FormInput";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
+import { verifyPasswordResetToken } from "../../api/auth";
+import { useNotification } from "../../hooks";
 
 export default function ConfirmPassword() {
-  const [isVerifying, setIsVerifying] = useState(true);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isValid, setIsValid] = useState(false);
   const [searchParams] = useSearchParams();
   const token = searchParams.get("token");
   const id = searchParams.get("id");
+
+  const { updateNotification } = useNotification();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    isValidToken();
+  }, []);
+
+  const isValidToken = async () => {
+    const { error, valid } = await verifyPasswordResetToken(token, id);
+    console.log(error);
+    setIsVerifying(false);
+    if (error) {
+      navigate("/auth/reset-password", { replace: true });
+      return updateNotification("error", error);
+    }
+
+    if (!valid) {
+      setIsValid(false);
+      return navigate("/auth/reset-password", { replace: true });
+    }
+
+    setIsValid(true);
+  };
 
   if (isVerifying)
     return (
       <FormContainer>
         <Container>
-          <div className="flex flex-col gap-6 space-x-2 items-center ">
+          <div className="flex space-x-2 items-center">
             <h1 className="text-4xl font-semibold dark:text-white text-primary">
-              Please wait, we are verifying your token
+              Please wait we are verifying your token!
             </h1>
             <ImSpinner3 className="animate-spin text-4xl dark:text-white text-primary" />
           </div>
+        </Container>
+      </FormContainer>
+    );
+
+  if (!isValid)
+    return (
+      <FormContainer>
+        <Container>
+          <h1 className="text-4xl font-semibold dark:text-white text-primary">
+            Sorry the token is invalid!
+          </h1>
         </Container>
       </FormContainer>
     );
@@ -34,19 +70,19 @@ export default function ConfirmPassword() {
     <FormContainer>
       <Container>
         <form className={commonModalClasses + " w-96"}>
-          <Title>Please Enter New Password</Title>
+          <Title>Enter New Password</Title>
           <FormInput
-            type="password"
             label="New Password"
             placeholder="********"
             name="password"
-          ></FormInput>
-          <FormInput
             type="password"
+          />
+          <FormInput
             label="Confirm Password"
             placeholder="********"
             name="confirmPassword"
-          ></FormInput>
+            type="password"
+          />
           <Submit value="Confirm Password" />
         </form>
       </Container>
