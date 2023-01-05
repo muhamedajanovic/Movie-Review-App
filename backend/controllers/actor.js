@@ -1,3 +1,4 @@
+const { query } = require("express");
 const { isValidObjectId } = require("mongoose");
 const Actor = require("../models/actor");
 const { sendError } = require("../utils/helper");
@@ -75,4 +76,11 @@ exports.removeActor = async (req, res) => {
 
   await Actor.findByIdAndDelete(actorId);
   res.json({ message: "Record removed succesfully" });
+};
+
+exports.searchActor = async (req, res) => {
+  const { query } = req;
+  const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
+
+  res.json(result);
 };
