@@ -1,4 +1,5 @@
 const crypto = require("crypto");
+const { nextTick } = require("process");
 const cloudinary = require("../cloud");
 
 exports.sendError = (res, error, statusCode = 401) =>
@@ -39,4 +40,16 @@ exports.uploadImageToCloud = async (file) => {
 exports.formatActor = (actor) => {
   const { name, gender, about, _id, avatar } = actor;
   return { id: _id, name, about, gender, avatar: avatar?.url };
+};
+
+exports.parseData = (req, res, next) => {
+  const { trailerInfo, cast, genres, tags, writers } = req.body;
+
+  if (trailerInfo) req.body.trailerInfo = JSON.parse(trailerInfo);
+  if (cast) req.body.cast = JSON.parse(cast);
+  if (genres) req.body.genres = JSON.parse(genres);
+  if (tags) req.body.tags = JSON.parse(tags);
+  if (writers) req.body.writers = JSON.parse(writers);
+
+  next();
 };
