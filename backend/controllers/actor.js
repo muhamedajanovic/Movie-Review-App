@@ -84,3 +84,8 @@ exports.searchActor = async (req, res) => {
 
   res.json(result);
 };
+
+exports.getLatestActors = async (req, res) => {
+  const result = await Actor.find().sort({ createdAt: "-1" }).limit(12);
+  res.json(result);
+};
