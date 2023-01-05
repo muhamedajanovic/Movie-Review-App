@@ -82,7 +82,8 @@ exports.validateMovie = [
     .withMessage("Cast must be an array of objects!")
     .custom((cast) => {
       for (let c of cast) {
-        if (!isValidObjectId(c.id)) throw Error("Invalid cast id inside cast!");
+        if (!isValidObjectId(c.actor))
+          throw Error("Invalid cast id inside cast!");
         if (!c.roleAs?.trim()) throw Error("Role as is missing inside cast!");
         if (typeof c.leadActor !== "boolean")
           throw Error(

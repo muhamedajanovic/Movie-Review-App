@@ -1,5 +1,6 @@
 const { sendError } = require("../utils/helper");
 const cloudinary = require("../cloud");
+const Movie = require("../models/movie");
 
 exports.uploadTrailer = async (req, res) => {
   const { file } = req;
@@ -33,5 +34,31 @@ exports.createMovie = async (req, res) => {
     language,
   } = body;
 
-  console.log(req.body);
+  const newMovie = new Movie({
+    title,
+    storyLine,
+    releaseDate,
+    status,
+    type,
+    genres,
+    tags,
+    cast,
+    trailer,
+    language,
+  });
+
+  if (director) {
+    if (!isValidObjectId(director))
+      return sendError(res, "Invalid director id!");
+    newMovie.director = director;
+  }
+
+  if (writers) {
+    for (let writerId of writers) {
+      if (!isValidObjectId(writerId))
+        return sendError(res, "Invalid writer id!");
+    }
+
+    newMovie.writers = writers;
+  }
 };
