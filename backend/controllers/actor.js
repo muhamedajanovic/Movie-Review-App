@@ -11,11 +11,15 @@ cloudinary.config({
 exports.createActor = async (req, res) => {
   const { name, about, gender } = req.body;
   const { file } = req;
-
   const newActor = new Actor({ name, about, gender });
-  const { secure_url, public_id } = await cloudinary.uploader.upload(file.path);
 
-  newActor.avatar = { url: secure_url, public_id };
-  newActor.save;
+  if (file) {
+    const { secure_url, public_id } = await cloudinary.uploader.upload(
+      file.path
+    );
+    newActor.avatar = { url: secure_url, public_id };
+  }
+
+  newActor.save();
   res.status(201).json(newActor);
 };
