@@ -1,15 +1,12 @@
 const { query } = require("express");
 const { isValidObjectId } = require("mongoose");
 const Actor = require("../models/actor");
-const { sendError } = require("../utils/helper");
-const cloudinary = require("cloudinary").v2;
-
-cloudinary.config({
-  cloud_name: "ddeixizf1",
-  api_key: "574124421836938",
-  api_secret: "IuSuqKagZcV6K-wp6XiPfh3apFY",
-  secure: true,
-});
+const {
+  sendError,
+  uploadImageToCloud,
+  formatActor,
+} = require("../utils/helper");
+const cloudinary = require("../cloud");
 
 exports.createActor = async (req, res) => {
   const { name, about, gender } = req.body;
@@ -17,15 +14,15 @@ exports.createActor = async (req, res) => {
   const newActor = new Actor({ name, about, gender });
 
   if (file) {
-    const { secure_url, public_id } = await cloudinary.uploader.upload(
-      file.path,
-      { gravity: "face", height: 500, width: 500, crop: "thumb" }
-    );
-    newActor.avatar = { url: secure_url, public_id };
+    const { url, public_id } = await uploadImageToCloud(file.path);
+    newActor.avatar = {
+      url,
+      public_id,
+    };
   }
 
   newActor.save();
-  res.status(201).json(newActor);
+  res.status(201).json(formatActor(newActor));
 };
 
 exports.updateActor = async (req, res) => {
@@ -45,11 +42,8 @@ exports.updateActor = async (req, res) => {
       return sendError(res, "Cloud not remove image from cloud");
   }
   if (file) {
-    const { secure_url, public_id } = await cloudinary.uploader.upload(
-      file.path,
-      { gravity: "face", height: 150, width: 150, crop: "thumb" }
-    );
-    actor.avatar = { url: secure_url, public_id };
+    const { url, public_id } = await uploadImageToCloud(file.path);
+    actor.avatar = { url, public_id };
   }
 
   actor.name = name;
@@ -57,7 +51,7 @@ exports.updateActor = async (req, res) => {
   actor.gender = gender;
 
   await actor.save();
-  res.status(201).json(actor);
+  res.status(201).json(formatActor(actor));
 };
 
 exports.removeActor = async (req, res) => {
@@ -82,10 +76,24 @@ exports.searchActor = async (req, res) => {
   const { query } = req;
   const result = await Actor.find({ $text: { $search: `"${query.name}"` } });
 
-  res.json(result);
+  const actors = result.map((actor) => formatActor(actor));
+
+  res.json(actors);
 };
 
 exports.getLatestActors = async (req, res) => {
   const result = await Actor.find().sort({ createdAt: "-1" }).limit(12);
-  res.json(result);
+  const actors = result.map((actor) => formatActor(actor));
+
+  res.json(actors);
+};
+
+exports.getSingleActor = async (req, res) => {
+  const { id } = req.params;
+
+  if (!isValidObjectId(id)) return sendError(res, "Invalid request");
+  const actor = await Actor.findById(id);
+  if (!actor) return sendError(res, "Invalid request, record not found");
+
+  res.json(formatActor(actor));
 };
