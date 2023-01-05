@@ -1,16 +1,19 @@
 const express = require("express");
 const { errorHandler } = require("./middlewares/error");
-const userRouter = require("./routes/user");
 require("dotenv").config();
 require("express-async-errors");
 require("./db");
 const cors = require("cors");
 const { handleNotFound } = require("./utils/helper");
 
+const userRouter = require("./routes/user");
+const actorRouter = require("./routes/actor");
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use("/api/user", userRouter);
+app.use("/api/actor", actorRouter);
 
 app.use("/*", handleNotFound);
 
