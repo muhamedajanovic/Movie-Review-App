@@ -8,7 +8,7 @@ import Container from "../Container";
 import FormContainer from "../form/FormContainer";
 import Submit from "../form/Submit";
 import Title from "../form/Title";
-import { verifyUserEmail } from "../../api/auth";
+import { resendEmailVerificationToken, verifyUserEmail } from "../../api/auth";
 import { useAuth, useNotification } from "../../hooks";
 
 const OTP_LENGHT = 6;
@@ -60,6 +60,14 @@ export default function EmailVerification() {
     setOtp([...newOtp]);
   };
 
+  const handleOTPResend = async () => {
+    const { error, message } = await resendEmailVerificationToken(user.id);
+
+    if (error) return updateNotification("error", error);
+
+    updateNotification("success", message);
+  };
+
   const handleKeyDown = ({ key }, index) => {
     currentOTPIndex = index;
     if (key === "Backspace") {
@@ -95,7 +103,7 @@ export default function EmailVerification() {
   useEffect(() => {
     if (!user) navigate("/not-foud");
     if (isLoggedIn && isVerified) navigate("/");
-  }, [user, isLoggedIn]);
+  }, [user, isLoggedIn, isVerified]);
 
   return (
     <FormContainer>
@@ -126,6 +134,7 @@ export default function EmailVerification() {
           <div>
             <Submit value="Verify account" />
             <button
+              onClick={handleOTPResend}
               type="button"
               className="dark:text-white text-blue-500 font-semibold hover:underline mt-2"
             >
