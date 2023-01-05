@@ -77,7 +77,13 @@ exports.verifyEmail = async (req, res) => {
 
   const jwtToken = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
   res.json({
-    user: { id: user._id, name: user.name, email: user.email, token: jwtToken },
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      token: jwtToken,
+      isVerified: user.isVerified,
+    },
     message: "Email is verified",
   });
 };
@@ -207,11 +213,11 @@ exports.signIn = async (req, res, next) => {
     const matched = await user.comparePassword(password);
     if (!matched) return sendError(res, "Email or password is not correct");
 
-    const { _id, name } = user;
+    const { _id, name, isVerified } = user;
 
     const jwtToken = jwt.sign({ userId: _id }, process.env.JWT_SECRET);
 
-    res.json({ user: { id: _id, name, email, token: jwtToken } });
+    res.json({ user: { id: _id, name, email, token: jwtToken, isVerified } });
   } catch (error) {
     next(error);
   }
