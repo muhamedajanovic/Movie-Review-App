@@ -1,12 +1,17 @@
 import React from "react";
 import { FileUploader } from "react-drag-drop-files";
 import { AiOutlineCloudUpload } from "react-icons/ai";
+import { uploadTrailer } from "../../api/movie";
 import { useNotification } from "../../hooks";
 
 export default function Dashboard() {
   const { updateNotification } = useNotification();
-  const handleChange = (file) => {
-    console.log(file);
+  const handleChange = async (file) => {
+    const formData = new FormData();
+    formData.append("video", file);
+
+    const res = await uploadTrailer(formData);
+    console.log(res);
   };
 
   const handleTypeError = (error) => {
