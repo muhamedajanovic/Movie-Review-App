@@ -83,6 +83,7 @@ exports.verifyEmail = async (req, res) => {
       email: user.email,
       token: jwtToken,
       isVerified: user.isVerified,
+      role: user.role,
     },
     message: "Email is verified",
   });
