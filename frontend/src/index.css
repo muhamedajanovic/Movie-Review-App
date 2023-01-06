@@ -11,7 +11,6 @@
 .bounce-custom {
   animation: bounce-custom 0.5s;
 }
-
 @keyframes bounce-custom {
   from,
   to {
@@ -25,6 +24,20 @@
   }
   75% {
     transform: scale(0.95, 1.05);
+  }
+}
+
+.animate-scale {
+  transform-origin: 0% 0%;
+  animation: scale 0.2s;
+}
+
+@keyframes scale {
+  0% {
+    transform: scaleY(0);
+  }
+  100% {
+    transform: scaleY(1);
   }
 }
 
