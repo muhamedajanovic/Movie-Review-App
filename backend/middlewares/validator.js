@@ -92,7 +92,7 @@ exports.validateMovie = [
         return true;
       }
     }),
-  check("trailerInfo")
+  check("trailer")
     .isObject()
     .withMessage("trailer must be an object with url and public_id")
     .custom(({ url, public_id }) => {
