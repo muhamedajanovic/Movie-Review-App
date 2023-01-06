@@ -9,7 +9,7 @@ import NotFound from "../components/NotFound";
 
 export default function AdminNavigator() {
   return (
-    <div className="flex">
+    <div className="flex dark:bg-primary bg-white">
       <Navbar />
       <div className="flex-1 p-2 max-w-screen-xl">
         <Header />
