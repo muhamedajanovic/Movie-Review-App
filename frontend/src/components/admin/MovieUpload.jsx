@@ -6,6 +6,7 @@ import { useNotification } from "../../hooks";
 
 export default function MovieUpload() {
   const [videoSelected, setVideoSelected] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const { updateNotification } = useNotification();
 
   const handleTypeError = (error) => {
@@ -16,14 +17,18 @@ export default function MovieUpload() {
     const formData = new FormData();
     formData.append("video", file);
 
-    const res = await uploadTrailer(formData);
+    const res = await uploadTrailer(formData, setUploadProgress);
     console.log(res);
   };
 
   return (
     <div className="fixed inset-0 dark:bg-white dark:bg-opacity-50 bg-primary bg-opacity-50 backdrop-blur-sm flex items-center justify-center">
       <div className="dark:bg-primary bg-white rounded w-[45rem] h-[40rem] overflow-auto">
-        <UploadProgress visible message="upload progress 20%" width={20} />
+        <UploadProgress
+          visible
+          message={`upload progress ${uploadProgress}%`}
+          width={uploadProgress}
+        />
         <TrailerSelector
           visible={!videoSelected}
           onTypeError={handleTypeError}
