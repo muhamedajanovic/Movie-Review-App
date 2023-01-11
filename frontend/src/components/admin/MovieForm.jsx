@@ -29,7 +29,7 @@ const defaultMovieInfo = {
   cast: [],
   director: {},
   writers: [],
-  releseDate: "",
+  releaseDate: "",
   poster: null,
   genres: [],
   type: "",
@@ -180,7 +180,7 @@ export default function MovieForm({ busy, onSubmit }) {
     writers,
     cast,
     tags,
-    releseDate,
+    releaseDate,
     genres,
     type,
     language,
@@ -256,8 +256,8 @@ export default function MovieForm({ busy, onSubmit }) {
             type="date"
             className={commonInputClasses + " border-2 rounded p-1 w-auto"}
             onChange={handleChange}
-            name="releseDate"
-            value={releseDate}
+            name="releaseDate"
+            value={releaseDate}
           />
 
           <Submit

@@ -3,7 +3,7 @@ export const validateMovie = (movieInfo) => {
     title,
     storyLine,
     language,
-    releseDate,
+    releaseDate,
     status,
     type,
     genres,
@@ -14,7 +14,7 @@ export const validateMovie = (movieInfo) => {
   if (!title.trim()) return { error: "Title is missing!" };
   if (!storyLine.trim()) return { error: "Story line is missing!" };
   if (!language.trim()) return { error: "Language is missing!" };
-  if (!releseDate.trim()) return { error: "Relese date is missing!" };
+  if (!releaseDate.trim()) return { error: "Relese date is missing!" };
   if (!status.trim()) return { error: "Status is missing!" };
   if (!type.trim()) return { error: "Type is missing!" };
 
